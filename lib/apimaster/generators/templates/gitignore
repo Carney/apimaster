@@ -1,0 +1,10 @@
+.DS_Store
+*.db
+public/*.*
+coverage/
+*.swp
+.yardoc/
+doc/
+tmp/
+*.rb~
+tags

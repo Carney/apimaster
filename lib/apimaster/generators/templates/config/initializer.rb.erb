@@ -1,0 +1,13 @@
+
+# Initialize environment
+ROOT_PATH = File.expand_path(".")
+ENV["RACK_ENV"] ||= "development"
+Bundler.require(:default, ENV["RACK_ENV"].to_sym)
+
+# Initialize settings
+setting_files = "./config/settings/{app,oauth}.yml"
+Apimaster::Setting.environment = ENV["RACK_ENV"]
+Apimaster::Setting.load_file(setting_files)
+
+# Database setting
+# Mongoid.load!("./config/settings/mongoid.yml")

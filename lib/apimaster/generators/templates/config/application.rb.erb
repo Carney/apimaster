@@ -1,0 +1,19 @@
+# encoding: utf-8
+#
+# Copyright (C) 2011-2012  AdMaster, Inc.
+
+module <%= module_name %>
+  class Application < Sinatra::Base
+
+    use Apimaster::Application
+
+    before do
+      # authorize
+    end
+
+    # controllers
+    use IndexController
+    # use YourCountroller
+
+  end
+end

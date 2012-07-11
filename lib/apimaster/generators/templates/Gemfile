@@ -1,0 +1,21 @@
+#source :gemcutter
+source "https://rubygems.org"
+
+gem "sinatra"
+gem "sinatra-contrib"
+gem "thin"
+gem "json"
+gem "rake"
+gem "apimaster"
+
+group :development do
+end
+
+group :production do
+end
+
+group :test do
+  gem "sqlite3"
+  gem "rack-test"
+end
+

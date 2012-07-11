@@ -1,0 +1,7 @@
+module <%= module_name %>
+  class IndexController < Sinatra::Base
+    get '/' do
+      json message: "Hello There, buddy!"
+    end
+  end
+end

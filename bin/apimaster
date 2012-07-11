@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'apimaster/generators/scripts'
+
+Apimaster::Generators::Scripts::Base.new.run(ARGV)

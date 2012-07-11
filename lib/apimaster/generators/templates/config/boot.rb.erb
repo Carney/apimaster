@@ -1,0 +1,17 @@
+# encoding: utf-8
+#
+# Copyright (C) 2011-2012  AdMaster, Inc.
+
+require "rubygems"
+require "bundler"
+require "cgi"
+
+require "./config/patches"
+require "./config/initializer"
+require "./lib/<%= app_name %>"
+
+Dir.glob "./app/{models,helpers,controllers}/**/*.rb" do |f|
+  require f
+end
+
+require "./config/application"
