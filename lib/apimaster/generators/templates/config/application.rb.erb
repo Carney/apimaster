@@ -7,12 +7,10 @@ module <%= module_name %>
 
     use Apimaster::Application
 
-    before do
-      # authorize
-    end
-
     # controllers
+    use BeforesController
     use IndexController
+    use ExamplesController
     # use YourCountroller
 
   end

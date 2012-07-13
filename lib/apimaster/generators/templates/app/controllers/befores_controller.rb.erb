@@ -3,9 +3,11 @@
 # Copyright (C) 2011-2012  AdMaster, Inc.
 
 module <%= module_name %>
-  class IndexController < Sinatra::Base
-    get '/' do
-      json message: "Hello There, buddy!"
+  class BeforesController < Sinatra::Base
+
+    before do
+      # authorize
     end
+
   end
 end

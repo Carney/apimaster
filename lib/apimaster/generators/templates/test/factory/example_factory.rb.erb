@@ -1,0 +1,7 @@
+class ExampleFactory < BaseFactory
+
+  register <%= module_name %>::Example
+
+  define :title, "Hello Title"
+  define :content, "This is hello content."
+end

@@ -4,34 +4,24 @@
 
 module Apimaster
   class Mapper
-    # include Mongoid::Document
+    include ::Mongoid::Document
 
     def post hash
-      from_hash hash
-      save
+      save_with_hash hash, :post
     end
 
     def put hash
-      from_hash hash
-      save
+      save_with_hash hash, :put
     end
 
     def patch hash
-      from_hash hash
-      save
+      save_with_hash hash, :patch
     end
 
-    def to_hash accessor = :all
-      record = {}
-      fields = self.class.find_attrs_in_options(:accessor, accessor)
-      fields.each do |field|
-        if self.respond_to?(field)
-          record[field] = self.send(field)
-        else
-          raise "Dataset #{self.class} has no method with the name of #{field}"
-        end
-      end
-      record
+    def save_with_hash hash, method
+      from_hash hash, method
+      save
+      self
     end
 
     def from_hash(hash, method = :all)
@@ -39,7 +29,7 @@ module Apimaster
       attrs = [:required, :optional]
 
       attrs.each do |type|
-        fields = self.class.get_attrs(type, method)
+        fields = self.class.find_attrs_in_options(type, method)
         fields.each do |field|
           if hash.has_key?(field)
             data[field] = hash[field]
@@ -62,25 +52,51 @@ module Apimaster
       self.send name, val
     end
 
+    def to_hash accessor = :all
+      record = {}
+      fields = self.class.find_attrs_in_options(:accessor, accessor)
+      fields.each do |field|
+        if self.respond_to?(field)
+          record[field] = self.send(field)
+        else
+          raise "Dataset #{self.class} has no method with the name of #{field}"
+        end
+      end
+      record
+    end
+
     class << self
 
       OPTION_TYPES = [:accessor, :required, :optional]
 
-      @attr_options ||= {}
-
       # attr_options :url, accessor: [:get, :list]
       def attr_options name, options = {}
+        @attr_options ||= {}
         @attr_options[name] = options
       end
 
       # [:url, :name]
       def find_attrs_in_options type, option = :all
         raise "Unknown attribute options type: #{type}" unless OPTION_TYPES.include? type
+        @attr_options ||= {}
         @attr_options.select do |name, options|
-          type_options = options.is_a?(Hash) and options.key?(type) ? options[type] : nil
-          type_options.is_a?(Array) and (type_options.include?(option) or type_options.include(:all))
+          type_options = (options.is_a?(Hash) and options.key?(type)) ? options[type] : nil
+          type_options.is_a?(Array) and (type_options.include?(option) or type_options.include?(:all))
         end.keys
       end
+
+      def post hash
+        self.new.post hash
+      end
+
+      def to_hashes accessor = :all
+        result = []
+        self.each do |val|
+          result << val.to_hash(accessor)
+        end
+        result
+      end
+
     end
   end
 end

@@ -1,0 +1,11 @@
+class ExampleTest < TestCase
+  def setup
+    <%= module_name %>::Example.delete_all
+  end
+
+  def test_title
+    example = <%= module_name %>::Example.new
+    example.title = 'hello'
+    assert_equal 'hello', example.title
+  end
+end

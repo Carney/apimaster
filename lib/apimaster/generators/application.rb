@@ -1,21 +1,9 @@
-require 'rbconfig'
 
 module Apimaster::Generators
   class Application < Create
-
-    DEFAULT_SHEBANG = File.join(RbConfig::CONFIG['bindir'],
-                                RbConfig::CONFIG['ruby_install_name'])
-
-    default_options   :shebang => DEFAULT_SHEBANG,
-                      :an_option => 'some_default'
-
     attr_reader :app_name, :module_name
 
     def initialize(runtime_args, runtime_options = {})
-      runtime_options[:source] = File.dirname(__FILE__) + '/templates'
-      runtime_options[:destination] = Dir.pwd
-      runtime_options[:collision] = :ask
-      runtime_options[:stdout] = STDOUT
       super
       usage if args.empty?
       #@destination_root = args.shift
@@ -46,14 +34,24 @@ module Apimaster::Generators
         m.template "config.ru.erb", "config.ru"
         m.template "gitignore", ".gitignore"
         m.template "lib/module.rb.erb", "lib/#{app_name}.rb"
+        m.template "app/tasks/test.rake.erb", "app/tasks/test.rake"
+        m.template "app/tasks/stat.rake.erb", "app/tasks/stat.rake"
         m.template "app/controllers/index_controller.rb.erb", "app/controllers/index_controller.rb"
+        m.template "app/controllers/befores_controller.rb.erb", "app/controllers/befores_controller.rb"
+
+        # example
+        m.template "app/controllers/examples_controller.rb.erb", "app/controllers/examples_controller.rb"
+        m.template "app/models/example.rb.erb", "app/models/example.rb"
+        m.template "test/unit/example_test.rb.erb", "test/unit/example_test.rb"
+        m.template "test/functional/examples_controller_test.rb.erb", "test/functional/examples_controller_test.rb"
+        m.template "test/factory/example_factory.rb.erb", "test/factory/example_factory.rb"
 
         # Test stubs
         m.template "test/test_helper.rb.erb", "test/test_helper.rb"
         m.template "test/functional_test.rb.erb", "test/functional/index_controller_test.rb"
         m.template "test/unit_test.rb.erb", "test/unit/#{app_name}_test.rb"
 
-        %w(LICENSE Rakefile README.md Gemfile TODO).each do |file|
+        %w(LICENSE Rakefile README.md Gemfile TODO test.watchr).each do |file|
           m.template file, file
         end
       end
@@ -94,6 +92,7 @@ module Apimaster::Generators
         app/views
         app/models
         app/helpers
+        app/tasks
         bin
         config
         config/settings

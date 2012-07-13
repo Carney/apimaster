@@ -34,6 +34,8 @@
 # +manifest+ method inside your generator subclass.
 #
 #
+require 'rbconfig'
+
 module Apimaster::Generators
   class GeneratorsError < StandardError; end
   class UsageError < GeneratorsError; end
@@ -74,6 +76,12 @@ module Apimaster::Generators
   class Base
     include Options
 
+    DEFAULT_SHEBANG = File.join(RbConfig::CONFIG['bindir'],
+                                RbConfig::CONFIG['ruby_install_name'])
+
+    default_options   :shebang => DEFAULT_SHEBANG,
+                      :an_option => 'some_default'
+
     # Declare default options for the generator.  These options
     # are inherited to subclasses.
     default_options :collision => :ask, :quiet => false, :stdout => STDOUT
@@ -94,6 +102,10 @@ module Apimaster::Generators
     attr_reader :source_root, :destination_root, :args, :stdout
 
     def initialize(runtime_args, runtime_options = {})
+      runtime_options[:source] = File.dirname(__FILE__) + '/templates'
+      runtime_options[:destination] = Dir.pwd
+      runtime_options[:collision] = :ask
+      runtime_options[:stdout] = STDOUT
       runtime_options[:backtrace] = true
       @logger = SimpleLogger.new
       @args = runtime_args
@@ -184,6 +196,41 @@ module Apimaster::Generators
       string = term.to_s
       string = string.sub(/^[a-z\d]*/) { $&.capitalize }
       string.gsub(/(?:_|(\/))([a-z\d]*)/i) { "#{$1}#{$2.capitalize}" }.gsub('/', '::')
+    end
+
+    def pluralize(word)
+      rules = {}
+      rules.store(/$/, 's')
+      rules.store(/s$/i, 's')
+      rules.store(/(ax|test)is$/i, '\1es')
+      rules.store(/(octop|vir)us$/i, '\1i')
+      rules.store(/(octop|vir)i$/i, '\1i')
+      rules.store(/(alias|status)$/i, '\1es')
+      rules.store(/(bu)s$/i, '\1ses')
+      rules.store(/(buffal|tomat)o$/i, '\1oes')
+      rules.store(/([ti])um$/i, '\1a')
+      rules.store(/([ti])a$/i, '\1a')
+      rules.store(/sis$/i, 'ses')
+      rules.store(/(?:([^f])fe|([lr])f)$/i, '\1\2ves')
+      rules.store(/(hive)$/i, '\1s')
+      rules.store(/([^aeiouy]|qu)y$/i, '\1ies')
+      rules.store(/(x|ch|ss|sh)$/i, '\1es')
+      rules.store(/(matr|vert|ind)(?:ix|ex)$/i, '\1ices')
+      rules.store(/(m|l)ouse$/i, '\1ice')
+      rules.store(/(m|l)ice$/i, '\1ice')
+      rules.store(/^(ox)$/i, '\1en')
+      rules.store(/^(oxen)$/i, '\1')
+      rules.store(/(quiz)$/i, '\1zes')
+      uncountable = %w(equipment information rice money species series fish sheep jeans)
+
+      result = word.to_s.dup
+
+      if word.empty? || uncountables.any? { |inflection| result =~ /\b#{inflection}\Z/i }
+        result
+      else
+        rules.each { |(rule, replacement)| break if result.gsub!(rule, replacement) }
+        result
+      end
     end
 
     protected

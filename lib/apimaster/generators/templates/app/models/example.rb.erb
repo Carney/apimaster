@@ -1,0 +1,13 @@
+# encoding: utf-8
+#
+# Copyright (C) 2011-2012  AdMaster, Inc.
+
+module <%= module_name %>
+  class Example < Apimaster::Mapper
+    field :title, type: String
+    field :content, type: String
+
+    attr_options :title, accessor: [:list], required: [:post]
+    attr_options :content, accessor: [:get], required: [:post]
+  end
+end

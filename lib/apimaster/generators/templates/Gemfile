@@ -1,4 +1,7 @@
-#source :gemcutter
+# encoding: utf-8
+#
+# Copyright (C) 2011-2012  AdMaster, Inc.
+
 source "https://rubygems.org"
 
 gem "sinatra"
@@ -6,6 +9,8 @@ gem "sinatra-contrib"
 gem "thin"
 gem "json"
 gem "rake"
+gem "mongoid"
+gem "bson_ext"
 gem "apimaster"
 
 group :development do
@@ -15,7 +20,5 @@ group :production do
 end
 
 group :test do
-  gem "sqlite3"
   gem "rack-test"
 end
-

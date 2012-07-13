@@ -1,1 +1,61 @@
+# encoding: utf-8
+#
+# Copyright (C) 2011-2012  AdMaster, Inc.
 
+ENV['RACK_ENV'] ||= "test"
+
+require "minitest/autorun"
+require "rack/test"
+require "./config/boot"
+
+class BaseFactory
+
+  def self.define name, value = nil
+    self.attrs[name] = value
+  end
+
+  def self.attrs
+    @attrs ||= {}
+  end
+
+  def self.attr key
+    @attrs ||= {}
+    @attrs[key]
+  end
+
+  def self.register name
+    @klass = name
+  end
+
+  def self.post data = {}
+    raise "Please register class first.`" unless @klass
+    @klass.post attrs.merge(data)
+  end
+
+end
+
+class TestCase < MiniTest::Unit::TestCase
+
+end
+
+class FunctionalTestCase < TestCase
+
+  include Rack::Test::Methods
+
+  def app
+    @app ||= Sinatra.new(<%= module_name %>::Application) {}
+  end
+
+  def body
+    last_response.body
+  end
+
+  def patch(uri, params = {}, env = {}, &block)
+    env = env.merge(:method => "PATCH", :params => params)
+    request(uri, env, &block)
+  end
+
+end
+
+Dir.glob "./test/factory/**/*_factory.rb" do |f| require f end
+Dir.glob "./test/mock/**/*_mock.rb" do |f| require f end

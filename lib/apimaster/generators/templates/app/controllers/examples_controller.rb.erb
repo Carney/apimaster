@@ -1,0 +1,15 @@
+module <%= module_name %>
+  class ExamplesController < Sinatra::Base
+
+    get '/examples/:id' do
+      example = Example.find params[:id]
+      json example.to_hash(:get)
+    end
+
+    get '/examples' do
+      examples = Example.all
+      json examples.to_hashes(:list)
+    end
+
+  end
+end

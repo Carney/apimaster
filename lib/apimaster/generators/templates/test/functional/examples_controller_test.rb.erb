@@ -1,0 +1,20 @@
+class ExamplesControllerTest < FunctionalTestCase
+  def setup
+    <%= module_name %>::Example.delete_all
+  end
+
+  def test_get_example_by_id
+    example = ExampleFactory.post
+
+    get "/examples/#{example._id}"
+    assert_equal 200, last_response.status
+  end
+
+  def test_get_examples
+    3.times { ExampleFactory.post }
+
+    get "/examples"
+    assert_equal 200, last_response.status
+  end
+
+end

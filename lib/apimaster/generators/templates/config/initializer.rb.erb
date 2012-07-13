@@ -10,4 +10,4 @@ Apimaster::Setting.environment = ENV["RACK_ENV"]
 Apimaster::Setting.load_file(setting_files)
 
 # Database setting
-# Mongoid.load!("./config/settings/mongoid.yml")
+Mongoid.load!("./config/settings/mongoid.yml")

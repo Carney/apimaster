@@ -1,0 +1,21 @@
+%w[unit functional integration performance].each do |type|
+  desc "Run #{type} tests"
+  task "test:#{type}" do
+    require "./test/test_helper"
+    Dir.glob "./test/#{type}/*_test.rb" do |f|
+      require f
+    end
+  end
+
+  desc "Run single file tests"
+  task "test:#{type}:file" do
+    file = "./test/#{type}/#{ENV["name"]}_test.rb"
+    if File.exists? file
+      require "./test/test_helper"
+      require file
+    else
+      puts "Test file not found: #{file}"
+    end
+  end
+
+end
