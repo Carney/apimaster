@@ -7,54 +7,33 @@ ENV['RACK_ENV'] ||= "test"
 require "minitest/autorun"
 require "rack/test"
 require "./config/boot"
+require "apimaster/test/factory"
+require "apimaster/test/methods"
+require "apimaster/mocks/user"
 
-class BaseFactory
-
-  def self.define name, value = nil
-    self.attrs[name] = value
-  end
-
-  def self.attrs
-    @attrs ||= {}
-  end
-
-  def self.attr key
-    @attrs ||= {}
-    @attrs[key]
-  end
-
-  def self.register name
-    @klass = name
-  end
-
-  def self.post data = {}
-    raise "Please register class first.`" unless @klass
-    @klass.post attrs.merge(data)
-  end
-
+class BaseFactory < Apimaster::Test::Factory
 end
 
 class TestCase < MiniTest::Unit::TestCase
-
 end
 
 class FunctionalTestCase < TestCase
 
   include Rack::Test::Methods
+  include Apimaster::Test::Methods
 
   def app
     @app ||= Sinatra.new(<%= module_name %>::Application) {}
   end
 
-  def body
-    last_response.body
-  end
+end
 
-  def patch(uri, params = {}, env = {}, &block)
-    env = env.merge(:method => "PATCH", :params => params)
-    request(uri, env, &block)
+module Apimaster::Helpers
+  module Session
+    def user_model
+      @user_model ||= Apimaster::Mocks::User
+    end
   end
-
 end
 
 Dir.glob "./test/factory/**/*_factory.rb" do |f| require f end
