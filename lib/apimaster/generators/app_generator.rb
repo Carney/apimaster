@@ -40,8 +40,6 @@ module Apimaster::Generators
 
         # Test stubs
         m.template "test/test_helper.rb.erb", "test/test_helper.rb"
-        m.template "test/functional_test.rb.erb", "test/functional/index_controller_test.rb"
-        m.template "test/unit_test.rb.erb", "test/unit/#{app_name}_test.rb"
 
         %w(LICENSE Rakefile README.md Gemfile TODO test.watchr).each do |file|
           m.template file, file
@@ -96,6 +94,7 @@ module Apimaster::Generators
         test/unit
         test/functional
         test/factory
+        test/mock
         tmp
         public
       )
