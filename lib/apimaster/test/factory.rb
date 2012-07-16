@@ -23,7 +23,7 @@ module Apimaster::Test
     end
 
     def self.post data = {}
-      raise "Please register class first.`" unless @klass
+      raise "Please register class first." unless @klass
       @klass.post attrs.merge(data)
     end
 
