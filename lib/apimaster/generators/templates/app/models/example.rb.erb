@@ -9,7 +9,7 @@ module <%= module_name %>
     field :title, type: String
     field :content, type: String
 
-    attr_options :title, accessor: [:list], required: [:post]
+    attr_options :title, accessor: [:get, :list], required: [:post]
     attr_options :content, accessor: [:get], required: [:post]
   end
 end
