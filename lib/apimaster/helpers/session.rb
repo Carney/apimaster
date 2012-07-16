@@ -23,7 +23,11 @@ module Apimaster::Helpers
 
     def auth_user
       @access_token ||= params[:access_token] or header_token
-      (test? ? Apimaster::Models::UserMock : Apimaster::Models::User).auth @access_token
+      user_model.auth @access_token
+    end
+
+    def user_model
+      @user_model ||= Apimaster::Models::User
     end
 
     def header_token
