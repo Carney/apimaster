@@ -4,7 +4,7 @@
 
 module Apimaster
   class Mapper
-    include ::Mongoid::Document
+    #include ::Mongoid::Document
 
     def post hash
       save_with_hash hash, :post

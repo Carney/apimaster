@@ -1,6 +1,6 @@
-class ExampleFactory < BaseFactory
+class <%= camelize name %>Factory < BaseFactory
 
-  register <%= module_name %>::Example
+  register <%= module_name %>::<%= camelize name %>
 
   define :title, "Hello Title"
   define :content, "This is hello content."

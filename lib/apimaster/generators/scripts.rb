@@ -7,7 +7,9 @@ require File.dirname(__FILE__) + '/simple_logger'
 
 require File.dirname(__FILE__) + '/base'
 require File.dirname(__FILE__) + '/command'
-require File.dirname(__FILE__) + '/application'
+require File.dirname(__FILE__) + '/app_generator'
+require File.dirname(__FILE__) + '/model_generator'
+require File.dirname(__FILE__) + '/controller_generator'
 
 module Apimaster::Generators
   module Scripts
@@ -25,7 +27,9 @@ module Apimaster::Generators
 
       def initialize
         @commands ||= {}
-        register("new", Application)
+        register("new", AppGenerator)
+        register("model", ModelGenerator)
+        register("controller", ControllerGenerator)
       end
 
       def register name, klass
@@ -44,21 +48,20 @@ module Apimaster::Generators
         end
 
         # Look up generator instance and invoke command on it.
-        if command = args.shift
-          raise "Invalid command name: #{command}" unless commands.key?(command)
-          commands[command].new(args).run
-        else
-          usage
+        begin
+          command = args.shift
+          if command and commands.key?(command)
+            commands[command].new(args).run
+          else
+            raise "Invalid command name: #{command}"
+          end
+        rescue => e
+          stdout.puts e
+          stdout.puts "  #{e.backtrace.join("\n  ")}\n" if options[:backtrace]
+          raise SystemExit unless options[:no_exit]
         end
-        end
-      rescue => e
-        stdout.puts e
-        stdout.puts "  #{e.backtrace.join("\n  ")}\n" if options[:backtrace]
-        raise SystemExit unless options[:no_exit]
       end
 
-      def usage
-        stdout.puts "apimaster new your_app_name"
-      end
+    end
   end
 end

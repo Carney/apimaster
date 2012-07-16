@@ -1,11 +1,10 @@
 
 module Apimaster::Generators
-  class Application < Create
+  class AppGenerator < Create
     attr_reader :app_name, :module_name
 
     def initialize(runtime_args, runtime_options = {})
       super
-      usage if args.empty?
       #@destination_root = args.shift
       #@app_name     = File.basename(File.expand_path(@destination_root))
       @app_name     = args[0]
@@ -38,13 +37,6 @@ module Apimaster::Generators
         m.template "app/tasks/stat.rake.erb", "app/tasks/stat.rake"
         m.template "app/controllers/index_controller.rb.erb", "app/controllers/index_controller.rb"
         m.template "app/controllers/befores_controller.rb.erb", "app/controllers/befores_controller.rb"
-
-        # example
-        m.template "app/controllers/examples_controller.rb.erb", "app/controllers/examples_controller.rb"
-        m.template "app/models/example.rb.erb", "app/models/example.rb"
-        m.template "test/unit/example_test.rb.erb", "test/unit/example_test.rb"
-        m.template "test/functional/examples_controller_test.rb.erb", "test/functional/examples_controller_test.rb"
-        m.template "test/factory/example_factory.rb.erb", "test/factory/example_factory.rb"
 
         # Test stubs
         m.template "test/test_helper.rb.erb", "test/test_helper.rb"

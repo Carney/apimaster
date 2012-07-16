@@ -3,7 +3,9 @@
 # Copyright (C) 2011-2012  AdMaster, Inc.
 
 module <%= module_name %>
-  class Example < Apimaster::Mapper
+  class <%= camelize name %> < Apimaster::Mapper
+    include Mongoid::Document
+
     field :title, type: String
     field :content, type: String
 

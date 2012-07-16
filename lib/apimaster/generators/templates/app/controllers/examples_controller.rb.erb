@@ -1,14 +1,14 @@
 module <%= module_name %>
-  class ExamplesController < Sinatra::Base
+  class <%= pluralize camelize(name) %>Controller < Sinatra::Base
 
-    get '/examples/:id' do
-      example = Example.find params[:id]
-      json example.to_hash(:get)
+    get '/<%= pluralize name %>/:id' do
+      <%= name %> = <%= camelize name %>.find params[:id]
+      json <%= name %>.to_hash(:get)
     end
 
-    get '/examples' do
-      examples = Example.all
-      json examples.to_hashes(:list)
+    get '/<%= pluralize name %>' do
+      <%= pluralize name %> = <%= camelize name %>.all
+      json <%= pluralize name %>.to_hashes(:list)
     end
 
   end

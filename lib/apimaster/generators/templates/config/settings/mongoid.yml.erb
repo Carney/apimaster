@@ -1,7 +1,7 @@
 production:
   sessions:
     default:
-      database: mongoid
+      database: <%= app_name %>
       username: user
       username: user
       password: password
@@ -10,7 +10,7 @@ production:
 development:
   sessions:
     default:
-      database: mongoid
+      database: <%= app_name %>_develop
       username: user
       username: user
       password: password
@@ -19,7 +19,7 @@ development:
 test:
   sessions:
     default:
-      database: mongoid
+      database: <%= app_name %>_test
       hosts:
         - localhost:27017
 

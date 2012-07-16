@@ -183,9 +183,14 @@ module Apimaster::Generators
     # and a hash of parsed arguments, takes the generator as an option
     # or first remaining argument, and invokes the requested command.
     def run
-      # Look up generator instance and invoke command on it.
-      manifest.replay(self)
-      after_generate
+      name = args.shift
+      if name
+        # Look up generator instance and invoke command on it.
+        manifest.replay(self)
+        after_generate
+      else
+        puts 'Undefined name.' unless options[:help]
+      end
     rescue => e
       puts e
       puts "  #{e.backtrace.join("\n  ")}\n" if options[:backtrace]
@@ -221,7 +226,7 @@ module Apimaster::Generators
       rules.store(/^(ox)$/i, '\1en')
       rules.store(/^(oxen)$/i, '\1')
       rules.store(/(quiz)$/i, '\1zes')
-      uncountable = %w(equipment information rice money species series fish sheep jeans)
+      uncountables = %w(equipment information rice money species series fish sheep jeans)
 
       result = word.to_s.dup
 

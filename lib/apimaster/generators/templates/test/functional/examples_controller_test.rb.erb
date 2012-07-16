@@ -1,19 +1,19 @@
-class ExamplesControllerTest < FunctionalTestCase
+class <%= pluralize camelize(name) %>ControllerTest < FunctionalTestCase
   def setup
-    <%= module_name %>::Example.delete_all
+    <%= module_name %>::<%= camelize name %>.delete_all
   end
 
-  def test_get_example_by_id
-    example = ExampleFactory.post
+  def test_get_<%= name %>_by_id
+    <%= name %> = <%= camelize name %>Factory.post
 
-    get "/examples/#{example._id}"
+    get "/<%= pluralize name %>/#{<%= name %>._id}"
     assert_equal 200, last_response.status
   end
 
-  def test_get_examples
-    3.times { ExampleFactory.post }
+  def test_get_<%= pluralize name %>
+    3.times { <%= camelize name %>Factory.post }
 
-    get "/examples"
+    get "/<%= pluralize name %>"
     assert_equal 200, last_response.status
   end
 
