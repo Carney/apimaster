@@ -5,7 +5,17 @@ class <%= camelize name %>Test < TestCase
 
   def test_title
     <%= name %> = <%= module_name %>::<%= camelize name %>.new
+
     <%= name %>.title = 'hello'
     assert_equal 'hello', <%= name %>.title
+    assert_equal true, <%= name %>.valid?
+
+    # title length
+    <%= name %>.title = 'x'
+    assert_equal false, <%= name %>.valid?
+
+    <%= name %>.title = 'x' * 50
+    assert_equal false, <%= name %>.valid?
+
   end
 end

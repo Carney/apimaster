@@ -9,7 +9,17 @@ module <%= module_name %>
     field :title, type: String
     field :content, type: String
 
-    attr_options :title, accessor: [:get, :list], required: [:post]
-    attr_options :content, accessor: [:get], required: [:post]
+    attr_options :title, accessor: [:get, :list], required: [:post], optional: [:patch]
+    attr_options :content, accessor: [:get], required: [:post], optional: [:patch]
+
+    validates :title, length: { minimum: 2, maximum: 30 }
+
+    class << self
+
+      def get id
+        find id or raise MissingError.new(<%= name %>, :id)
+      end
+
+    end
   end
 end

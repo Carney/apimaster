@@ -17,4 +17,24 @@ class <%= pluralize camelize(name) %>ControllerTest < FunctionalTestCase
     assert_equal 200, last_response.status
   end
 
+  def test_post_<%= pluralize name %>
+    post "/<%= pluralize name %>", to_json(<%= camelize name %>Factory.attrs)
+    assert_equal 201, last_response.status
+  end
+
+  def test_patch_<%= name %>_by_id
+    <%= name %> = <%= camelize name %>Factory.post
+
+    hash = {content: 'my content'}
+    patch "/<%= pluralize name %>/#{<%= name %>._id}", to_json(hash)
+    assert_equal 200, last_response.status
+  end
+
+  def test_delete_<%= name %>_by_id
+    <%= name %> = <%= camelize name %>Factory.post
+
+    delete "/<%= pluralize name %>/#{<%= name %>._id}"
+    assert_equal 204, last_response.status
+  end
+
 end

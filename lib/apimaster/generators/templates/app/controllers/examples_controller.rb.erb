@@ -2,13 +2,34 @@ module <%= module_name %>
   class <%= pluralize camelize(name) %>Controller < Sinatra::Base
 
     get '/<%= pluralize name %>/:id' do
-      <%= name %> = <%= camelize name %>.find params[:id]
+      <%= name %> = <%= camelize name %>.get params[:id]
       json <%= name %>.to_hash(:get)
     end
 
     get '/<%= pluralize name %>' do
       <%= pluralize name %> = <%= camelize name %>.all
       json <%= pluralize name %>.to_hashes(:list)
+    end
+
+    post '/<%= pluralize name %>' do
+      <%= pluralize name %> = <%= camelize name %>.post(posts)
+
+      status 201
+      json <%= pluralize name %>.to_hash(:get)
+    end
+
+    patch '/<%= pluralize name %>/:id' do
+      <%= name %> = <%= camelize name %>.get params[:id]
+
+      <%= name %>.patch(posts)
+      json <%= name %>.to_hash(:get)
+    end
+
+    delete '/<%= pluralize name %>/:id' do
+      <%= name %> = <%= camelize name %>.get params[:id]
+      <%= name %>.delete
+      status 204
+      nil
     end
 
   end
