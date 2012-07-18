@@ -14,5 +14,13 @@ module Apimaster::Test
       request(uri, env, &block)
     end
 
+    def from_json
+      @response_json ||= JSON.parse(last_response.body)
+    end
+
+    def to_json(hash)
+      JSON.generate(hash)
+    end
+
   end
 end
