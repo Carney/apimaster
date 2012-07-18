@@ -20,7 +20,11 @@ module Apimaster
 
     def save_with_hash hash, method
       from_hash hash, method
-      save
+      if valid?
+        save
+      else
+        raise InvalidFieldError.new(class_name, errors.keys.first)
+      end
       self
     end
 
@@ -63,6 +67,10 @@ module Apimaster
         end
       end
       record
+    end
+
+    def class_name
+      @class_name ||= self.class.to_s.split("::").last
     end
 
     class << self
