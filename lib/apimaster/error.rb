@@ -36,7 +36,7 @@ module Apimaster
 
   class InvalidFieldError < NormalError
     def initialize(resource = nil, field = nil)
-      super("The formatting of the field '#{field}' on a resource '#{resource}' is invalid.", 422, :invalid, resource, field)
+      super("The formatting of the field '#{field}' on a resource '#{resource}' is invalid.", 422, :invalid_field, resource, field)
     end
   end
 
